@@ -1,111 +1,121 @@
-library IEEE;
+LIBRARY ieee;
 
-use IEEE.STD_LOGIC_1164.ALL;
-
-
-
-entity Full_Adder_8bit is
-
-    Port ( 
-
-        A    : in  STD_LOGIC_VECTOR (7 downto 0);
-
-        B    : in  STD_LOGIC_VECTOR (7 downto 0);
-
-        Cin  : in  STD_LOGIC;
-
-        Sum  : out STD_LOGIC_VECTOR (7 downto 0);
-
-        Cout : out STD_LOGIC
-
-    );
-
-end Full_Adder_8bit;
+USE ieee.std_logic_1164.ALL;
 
 
 
-architecture Structural of Full_Adder_8bit is
+ENTITY Full_Adder_8bit_tb IS
+
+END Full_Adder_8bit_tb;
 
 
 
-    component Full_adder is
+ARCHITECTURE behavior OF Full_Adder_8bit_tb IS 
 
-        Port ( 
 
-            A    : in  STD_LOGIC;
 
-            B    : in  STD_LOGIC;
+    -- Component Declaration for the Unit Under Test (UUT)
 
-            Cin  : in  STD_LOGIC;
+    COMPONENT Full_Adder_8bit
 
-            Sum  : out STD_LOGIC;
+    PORT(
 
-            Cout : out STD_LOGIC
+         A    : IN  std_logic_vector(7 downto 0);
+
+         B    : IN  std_logic_vector(7 downto 0);
+
+         Cin  : IN  std_logic;
+
+         Sum  : OUT std_logic_vector(7 downto 0);
+
+         Cout : OUT std_logic
 
         );
 
-    end component;
+    END COMPONENT;
 
 
 
-    signal C : STD_LOGIC_VECTOR (6 downto 0);
+   --Inputs
+
+   signal A   : std_logic_vector(7 downto 0) := (others => '0');
+
+   signal B   : std_logic_vector(7 downto 0) := (others => '0');
+
+   signal Cin : std_logic := '0';
 
 
 
-begin
+   --Outputs
+
+   signal Sum  : std_logic_vector(7 downto 0);
+
+   signal Cout : std_logic;
 
 
 
-    FA_0: Full_adder port map (
-
-        A => A(0),
-
-        B => B(0),
-
-        Cin => Cin,
-
-        Sum => Sum(0),
-
-        Cout => C(0)
-
-    );
+BEGIN
 
 
 
-    GEN_FA: for i in 1 to 6 generate
+   -- Instantiate the Unit Under Test (UUT)
 
-        FA_i: Full_adder port map (
+   uut: Full_Adder_8bit PORT MAP (
 
-            A => A(i),
+          A => A,
 
-            B => B(i),
+          B => B,
 
-            Cin => C(i-1),
+          Cin => Cin,
 
-            Sum => Sum(i),
+          Sum => Sum,
 
-            Cout => C(i)
+          Cout => Cout
 
         );
 
-    end generate GEN_FA;
+
+
+   -- Stimulus process (Test Cases)
+
+   stim_proc: process
+
+   begin		
+
+      -- Initial delay
+
+      wait for 100 ns;	
 
 
 
-    FA_7: Full_adder port map (
+      -- Test Case 1: 10 + 20 + 0 = 30
 
-        A => A(7),
+      A <= "00001010"; B <= "00010100"; Cin <= '0';
 
-        B => B(7),
-
-        Cin => C(6),
-
-        Sum => Sum(7),
-
-        Cout => Cout
-
-    );
+      wait for 100 ns;	
 
 
 
-end Structural;
+      -- Test Case 2: 15 + 10 + 1 = 26
+
+      A <= "00001111"; B <= "00001010"; Cin <= '1';
+
+      wait for 100 ns;
+
+
+
+      -- Test Case 3: 255 + 1 + 0 = 256 (Sum = 0, Cout = 1)
+
+      A <= "11111111"; B <= "00000001"; Cin <= '0';
+
+      wait for 100 ns;
+
+
+
+      wait;
+
+   end process;
+
+
+
+END behavior;
