@@ -1,103 +1,69 @@
-LIBRARY ieee;
+library IEEE;
 
-USE ieee.std_logic_1164.ALL;
+use IEEE.STD_LOGIC_1164.ALL;
 
 
 
-ENTITY AND_gate_tb IS
+entity Full_adder is
 
-END AND_gate_tb;
+    Port ( A    : in  STD_LOGIC;
 
+           B    : in  STD_LOGIC;
 
+           Cin  : in  STD_LOGIC;
 
-ARCHITECTURE behavior OF AND_gate_tb IS 
+           Sum  : out STD_LOGIC;
 
+           Cout : out STD_LOGIC);
 
+end Full_adder;
 
-    -- Component Declaration for the Unit Under Test (UUT)
 
-    COMPONENT AND_gate
 
-    PORT(
+architecture Structural of Full_adder is
 
-         A : IN  std_logic;
 
-         B : IN  std_logic;
 
-         Y : OUT  std_logic
+    component Half_adder
 
-        );
+        Port ( A     : in  STD_LOGIC;
 
-    END COMPONENT;
+               B     : in  STD_LOGIC;
 
+               Sum   : out STD_LOGIC;
 
+               Carry : out STD_LOGIC);
 
-    --Inputs
+    end component;
 
-    signal A : std_logic := '0';
 
-    signal B : std_logic := '0';
 
+    component OR_gate
 
+        Port ( A : in  STD_LOGIC;
 
-    --Outputs
+               B : in  STD_LOGIC;
 
-    signal Y : std_logic;
+               Y : out STD_LOGIC);
 
+    end component;
 
 
-BEGIN
 
+    signal s1, c1, c2 : STD_LOGIC;
 
 
-    -- Instantiate the Unit Under Test (UUT)
 
-    uut: AND_gate PORT MAP (
+begin
 
-          A => A,
 
-          B => B,
 
-          Y => Y
+    HA1: Half_adder port map (A => A,  B => B,   Sum => s1,  Carry => c1);
 
-        );
+    HA2: Half_adder port map (A => s1, B => Cin, Sum => Sum, Carry => c2);
 
+    OR1: OR_gate    port map (A => c1, B => c2,  Y => Cout);
 
 
-    -- Stimulus process
 
-    stim_proc: process
-
-    begin
-
-        A <= '0'; B <= '0';
-
-        wait for 100 ns;
-
-
-
-        A <= '0'; B <= '1';
-
-        wait for 100 ns;
-
-
-
-        A <= '1'; B <= '0';
-
-        wait for 100 ns;
-
-
-
-        A <= '1'; B <= '1';
-
-        wait for 100 ns;
-
-
-
-        wait;
-
-    end process;
-
-
-
-END;
+end Structural;
