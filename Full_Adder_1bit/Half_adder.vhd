@@ -1,109 +1,59 @@
-LIBRARY ieee;
+library IEEE;
 
-USE ieee.std_logic_1164.ALL;
+use IEEE.STD_LOGIC_1164.ALL;
 
 
 
-ENTITY Full_adder_tb IS
+entity Half_adder is
 
-END Full_adder_tb;
+    Port ( A     : in  STD_LOGIC;
 
+           B     : in  STD_LOGIC;
 
+           Sum   : out STD_LOGIC;
 
-ARCHITECTURE behavior OF Full_adder_tb IS 
+           Carry : out STD_LOGIC);
 
+end Half_adder;
 
 
-    -- Component Declaration for the Unit Under Test (UUT)
 
-    COMPONENT Full_adder
+architecture Structural of Half_adder is
 
-    PORT(
 
-         A : IN  std_logic;
 
-         B : IN  std_logic;
+    component XOR_gate
 
-         Cin : IN  std_logic;
+        Port ( A : in  STD_LOGIC;
 
-         Sum : OUT  std_logic;
+               B : in  STD_LOGIC;
 
-         Cout : OUT  std_logic
+               Y : out STD_LOGIC);
 
-        );
+    end component;
 
-    END COMPONENT;
 
 
+    component AND_gate
 
-    --Inputs
+        Port ( A : in  STD_LOGIC;
 
-    signal A : std_logic := '0';
+               B : in  STD_LOGIC;
 
-    signal B : std_logic := '0';
+               Y : out STD_LOGIC);
 
-    signal Cin : std_logic := '0';
+    end component;
 
 
 
-    --Outputs
+begin
 
-    signal Sum : std_logic;
 
-    signal Cout : std_logic;
 
+    X1: XOR_gate port map (A => A, B => B, Y => Sum);
 
+    A1: AND_gate port map (A => A, B => B, Y => Carry);
 
-BEGIN
 
 
-
-    -- Instantiate the Unit Under Test (UUT)
-
-    uut: Full_adder PORT MAP (
-
-          A => A,
-
-          B => B,
-
-          Cin => Cin,
-
-          Sum => Sum,
-
-          Cout => Cout
-
-        );
-
-
-
-    -- Stimulus process
-
-    stim_proc: process
-
-    begin
-
-        A <= '0'; B <= '0'; Cin <= '0'; wait for 100 ns;
-
-        A <= '0'; B <= '0'; Cin <= '1'; wait for 100 ns;
-
-        A <= '0'; B <= '1'; Cin <= '0'; wait for 100 ns;
-
-        A <= '0'; B <= '1'; Cin <= '1'; wait for 100 ns;
-
-        A <= '1'; B <= '0'; Cin <= '0'; wait for 100 ns;
-
-        A <= '1'; B <= '0'; Cin <= '1'; wait for 100 ns;
-
-        A <= '1'; B <= '1'; Cin <= '0'; wait for 100 ns;
-
-        A <= '1'; B <= '1'; Cin <= '1'; wait for 100 ns;
-
-
-
-        wait;
-
-    end process;
-
-
-
-END;
+end Structural;
